@@ -11,17 +11,16 @@ option(BUILD_DOCUMENTATION "Create and install documentation (requires Doxygen)"
 
 if(DOXYGEN_FOUND)
 
-	set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/doc/Doxyfile.in)
-    set(DOXYGEN_OUT ${PROJECT_BINARY_DIR}/doc/Doxyfile)
+	set(DOXYGEN ${CMAKE_SOURCE_DIR}/doc/Doxyfile.in)
 	
-	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
     message("Doxygen build started")
+	
 	add_custom_target(
 		docs ALL
-		COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+		COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN}
 		COMMENT "Generating API documentation with Doxygen"
 		VERBATIM
-		WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/doc
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/doc
 	)
 
 endif()
@@ -76,6 +75,7 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src CONFIGURATIONS Release
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src CONFIGURATIONS Release
 	DESTINATION ${PROJECT_BINARY_DIR}/prj)
 
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/doc DESTINATION ${PROJECT_BINARY_DIR})
 
 add_subdirectory(prj)
 add_subdirectory(libs)
