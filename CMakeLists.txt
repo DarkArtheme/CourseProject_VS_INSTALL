@@ -6,7 +6,25 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /W1")
 set(CMAKE_CXX_STANDARD 17)
 
 
-#set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}")
+find_package(Doxygen)
+option(BUILD_DOCUMENTATION "Create and install documentation (requires Doxygen)" ${DOXYGEN_FOUND})
+
+if(DOXYGEN_FOUND)
+
+	set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/doc/Doxyfile.in)
+    set(DOXYGEN_OUT ${PROJECT_BINARY_DIR}/doc/Doxyfile)
+	
+	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    message("Doxygen build started")
+	add_custom_target(
+		docs ALL
+		COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+		COMMENT "Generating API documentation with Doxygen"
+		VERBATIM
+		WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/doc
+	)
+
+endif()
 
 
 include_directories(prj)
@@ -58,8 +76,10 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src CONFIGURATIONS Release
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src CONFIGURATIONS Release
 	DESTINATION ${PROJECT_BINARY_DIR}/prj)
 
+
 add_subdirectory(prj)
 add_subdirectory(libs)
+
 
 
 
