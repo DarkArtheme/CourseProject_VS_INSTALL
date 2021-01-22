@@ -26,15 +26,15 @@ void loadSources(){
 void updateQuery(std::vector<std::shared_ptr<BaseTower>>& towers, std::vector<std::shared_ptr<BaseEnemy>>& enemies);
 template<class Tower>
 ///@brief Строит башню.
-void changeTower(std::vector<std::shared_ptr<BaseTower>>& towers, Tower new_tower, const size_t ind);
+void changeTower(std::vector<std::shared_ptr<BaseTower>>& towers, Tower new_tower, size_t ind);
 
 ///@brief Обрабатывает главное меню.
 bool manageMainMenu(sf::RenderWindow& window, sf::Texture& main_menu_image, ContextMenu& main_menu
-    , std::vector<std::shared_ptr<Button>>& main_menu_buttons, ContextMenu& level_menu, const double scale_x, const double scale_y);
+    , std::vector<std::shared_ptr<Button>>& main_menu_buttons, ContextMenu& level_menu, double scale_x, double scale_y);
 
 ///@brief Обрабатывает меню выбора уровня.
 bool manageLevelMenu(sf::RenderWindow& window, sf::Texture& main_menu_image, ContextMenu& level_menu
-    , std::vector<std::shared_ptr<Button>>& level_menu_buttons, int& chosen_level, const int passed_levels, const double scale_x, const double scale_y);
+    , std::vector<std::shared_ptr<Button>>& level_menu_buttons, int& chosen_level, int passed_levels, double scale_x, double scale_y);
 
 ///@brief Обрабатывает меню паузы.
 bool managePauseMenu(sf::RenderWindow& window, ContextMenu& pause_menu
@@ -45,30 +45,30 @@ bool manageVictoryMenu(sf::RenderWindow& window, ContextMenu& victory_menu, std:
     , int& chosen_level);
 
 ///@brief Обрабатывает меню поражения.
-bool manageDefeatMenu(sf::RenderWindow& window, ContextMenu& victory_menu, std::vector<std::shared_ptr<Button>>& victory_menu_buttons, bool& try_again);
+bool manageDefeatMenu(sf::RenderWindow& window, ContextMenu& defeat_menu, std::vector<std::shared_ptr<Button>>& defeat_menu_buttons, bool& try_again);
 
 ///@brief Порождает меню выбора башни.
-std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createTowerMenu(const sf::Font& font, const double scale_x, const double scale_y);
+std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createTowerMenu(const sf::Font& font, double scale_x, double scale_y);
 
 ///@brief Порождает главное меню.
-std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createMainMenu(const sf::Font& font, const double scale_x, const double scale_y);
+std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createMainMenu(const sf::Font& font, double scale_x, double scale_y);
 
 ///@brief Порождает меню выбора уровня.
-std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createLevelMenu(const sf::Font& font, const int passed_levels, const double scale_x, const double scale_y);
+std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createLevelMenu(const sf::Font& font, int passed_levels, double scale_x, double scale_y);
 
 ///@brief Порождает меню паузы.
-std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createPauseMenu(const sf::Font& font, const double scale_x, const double scale_y);
+std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createPauseMenu(const sf::Font& font, double scale_x, double scale_y);
 
 ///@brief Порождает меню победы.
-std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createVictoryMenu(const sf::Font& font, const double scale_x, const double scale_y);
+std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createVictoryMenu(const sf::Font& font, double scale_x, double scale_y);
 
 ///@brief Порождает меню поражения.
-std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createDefeatMenu(const sf::Font& font, const double scale_x, const double scale_y);
+std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createDefeatMenu(const sf::Font& font, double scale_x, double scale_y);
 
 ///@brief Обрабатывает основной игровой цикл
-bool manageGameCycle(sf::RenderWindow& window, const double scale_x, const double scale_y, int& level_number, int& clicked_level, bool& should_show_main_menu);
+bool manageGameCycle(sf::RenderWindow& window, double scale_x, double scale_y, int& level_number, int& clicked_level, bool& should_show_main_menu);
 
-int main(int argc, char* argv[]) {
+int main() {
 	sf::RenderWindow window(sf::VideoMode(1920, 1080), "Prj-Towers", sf::Style::Fullscreen);
 	window.setFramerateLimit(120);
 	double scale_x = window.getSize().x / 1920.0;
@@ -266,7 +266,7 @@ bool manageGameCycle(sf::RenderWindow& window, const double scale_x, const doubl
                     case sf::Event::MouseButtonPressed: {
                         sf::Vector2i cursor = sf::Mouse::getPosition(window);
                         switch (event.mouseButton.button) {
-                            case sf::Mouse::Button::Left:
+                            case sf::Mouse::Button::Left: {
                                 size_t c = 0;
                                 for (auto &button : tower_buttons) {
                                     if (button.isVisible() && button.isActivated(cursor) && !menu_towers.isVisible()) {
@@ -289,7 +289,7 @@ bool manageGameCycle(sf::RenderWindow& window, const double scale_x, const doubl
                                             }
                                             if (cnt == 0) {
                                                 int cost = towers[menu_towers.getTowerIndex()]->getCost();
-                                                if(cost > score_number){
+                                                if (cost > score_number) {
                                                     should_draw_warning = true;
                                                     continue;
                                                 }
@@ -302,12 +302,18 @@ bool manageGameCycle(sf::RenderWindow& window, const double scale_x, const doubl
                                                 range_circle = a;
                                                 break;
                                             }
-                                            if(cnt == 1){
+                                            if (cnt == 1) {
                                                 size_t ind = menu_towers.getTowerIndex();
-                                                changeTower(towers, HeavyTower(towers[ind]->getPos(), towers[ind]->getSide(), towers[ind]->getClockptr(), scale_x, scale_y), ind);
+                                                changeTower(towers,
+                                                            HeavyTower(towers[ind]->getPos(), towers[ind]->getSide(),
+                                                                       towers[ind]->getClockptr(), scale_x, scale_y),
+                                                            ind);
                                                 int cost = towers[ind]->getCost();
-                                                if(cost > score_number){
-                                                    changeTower(towers, LightTower(towers[ind]->getPos(), towers[ind]->getSide(), towers[ind]->getClockptr(), scale_x, scale_y), ind);
+                                                if (cost > score_number) {
+                                                    changeTower(towers, LightTower(towers[ind]->getPos(),
+                                                                                   towers[ind]->getSide(),
+                                                                                   towers[ind]->getClockptr(), scale_x,
+                                                                                   scale_y), ind);
                                                     should_draw_warning = true;
                                                     continue;
                                                 }
@@ -325,11 +331,14 @@ bool manageGameCycle(sf::RenderWindow& window, const double scale_x, const doubl
                                     }
                                 }
                                 break;
+                            }
+                            default:
+                                break;
                         }
                         should_break = true;
                         break;
                     }
-                    case sf::Event::MouseMoved:
+                    case sf::Event::MouseMoved: {
                         sf::Vector2i cursor = sf::Mouse::getPosition(window);
                         for (auto &button : tower_buttons) {
                             button.checkCursor(cursor);
@@ -337,17 +346,19 @@ bool manageGameCycle(sf::RenderWindow& window, const double scale_x, const doubl
                         if (menu_towers.isVisible()) {
                             size_t cnt = 0;
                             for (auto &button : menu_towers_buttons) {
-                                if(cnt == 0){
-                                    if(button->checkCursor(cursor)){
+                                if (cnt == 0) {
+                                    if (button->checkCursor(cursor)) {
                                         range_circle = towers[menu_towers.getTowerIndex()]->getCircleRange();
                                         break;
                                     }
 
                                 }
-                                if(cnt == 1){
-                                    if(button->checkCursor(cursor)){
-                                        HeavyTower temp(towers[menu_towers.getTowerIndex()]->getPos()
-                                                , towers[menu_towers.getTowerIndex()]->getSide(), towers[menu_towers.getTowerIndex()]->getClockptr(), scale_x, scale_y);
+                                if (cnt == 1) {
+                                    if (button->checkCursor(cursor)) {
+                                        HeavyTower temp(towers[menu_towers.getTowerIndex()]->getPos(),
+                                                        towers[menu_towers.getTowerIndex()]->getSide(),
+                                                        towers[menu_towers.getTowerIndex()]->getClockptr(), scale_x,
+                                                        scale_y);
                                         range_circle = temp.getCircleRange();
                                         break;
                                     }
@@ -359,6 +370,9 @@ bool manageGameCycle(sf::RenderWindow& window, const double scale_x, const doubl
                                 ++cnt;
                             }
                         }
+                        break;
+                    }
+                    default:
                         break;
                 }
                 if (should_break) break;
@@ -505,11 +519,12 @@ void updateQuery(std::vector<std::shared_ptr<BaseTower>>& towers, std::vector<st
 
 
 std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createTowerMenu(const sf::Font& font, const double scale_x, const double scale_y){
-    float menu_left = 0 * scale_x, menu_top = 300 * scale_y, menu_width = 400 * scale_x, menu_height = 720 * scale_y;
-    float button_width  = 300 * scale_x, button_height = 80 * scale_y;
-    float button_left = menu_left + (menu_width - button_width) / 2.0;
-    float period = 100 * scale_y;
-    float button_top = menu_top + 2.0 * period;
+    auto menu_left = static_cast<float>(0 * scale_x), menu_top = static_cast<float>(300 * scale_y),
+        menu_width = static_cast<float>(400 * scale_x), menu_height = static_cast<float>(720 * scale_y);
+    auto button_width  = static_cast<float>(300 * scale_x), button_height = static_cast<float>(80 * scale_y);
+    float button_left = menu_left + (menu_width - button_width) / 2.0f;
+    float period = 100.0f * static_cast<float>(scale_y);
+    float button_top = menu_top + 2.0f * period;
 
     sf::FloatRect parameters(menu_left, menu_top, menu_width, menu_height);
     std::vector<std::shared_ptr<Button>> buttons;
@@ -530,11 +545,12 @@ std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createTowerMenu(con
 }
 
 std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createMainMenu(const sf::Font& font, const double scale_x, const double scale_y){
-    float menu_left = 0 * scale_x, menu_top = 0 * scale_y, menu_width = 1920 * scale_x, menu_height = 1080 * scale_y;
-    float button_width  = 400 * scale_x, button_height = 100 * scale_y;
-    float button_left = menu_left + (menu_width - button_width) / 2.0;
-    float period = 150 * scale_y;
-    float button_top = menu_top + 2.0 * period;
+    auto menu_left = static_cast<float>(0 * scale_x), menu_top = static_cast<float>(0 * scale_y),
+        menu_width = static_cast<float>(1920 * scale_x), menu_height = static_cast<float>(1080 * scale_y);
+    auto button_width  = static_cast<float>(400 * scale_x), button_height = static_cast<float>(100 * scale_y);
+    float button_left = menu_left + (menu_width - button_width) / 2.0f;
+    auto period = static_cast<float>(150 * scale_y);
+    float button_top = menu_top + 2.0f * period;
     sf::FloatRect parameters(menu_left, menu_top, menu_width, menu_height);
     std::vector<std::shared_ptr<Button>> buttons;
     buttons.push_back(std::make_shared<ButtonRec>(sf::FloatRect(button_left, button_top + period, button_width, button_height)
@@ -553,11 +569,12 @@ std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createMainMenu(cons
 }
 
 std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createLevelMenu(const sf::Font& font, const int passed_levels, const double scale_x, const double scale_y){
-    float menu_left = 0 * scale_x, menu_top = 0 * scale_y, menu_width = 1920 * scale_x, menu_height = 1080 * scale_y;
-    float button_width  = 75 * scale_x, button_height = 75 * scale_y;
-    float period = 20 * scale_x;
+    auto menu_left = static_cast<float>(0 * scale_x), menu_top = static_cast<float>(0 * scale_y),
+        menu_width = static_cast<float>(1920 * scale_x), menu_height = static_cast<float>(1080 * scale_y);
+    auto button_width  = static_cast<float>(75 * scale_x), button_height = static_cast<float>(75 * scale_y);
+    auto period = static_cast<float>(20 * scale_x);
     float button_left = period;
-    float button_top = menu_height / 6;
+    float button_top = menu_height / 6.0f;
     int lvl_in_row = 20;
     int rows = 4;
     sf::FloatRect parameters(menu_left, menu_top, menu_width, menu_height);
@@ -570,7 +587,8 @@ std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createLevelMenu(con
     for(int j = 1; j <= rows; ++j) {
         for (size_t i = 1; i <= lvl_in_row; ++i) {
             buttons.push_back(std::make_shared<ButtonRec>(
-                    sf::FloatRect(button_left + (i - 1) * (button_width + period), button_top + (j - 1) * 10 * period, button_width,
+                    sf::FloatRect(button_left + static_cast<float>((i - 1)) * (button_width + period), button_top
+                    + static_cast<float>((j - 1)) * 10 * period, button_width,
                                   button_height),
                     c, g, g, sf::Color::White, font, std::min(scale_x, scale_y) * 24, std::to_string(i+(j-1) * lvl_in_row),
                     3));
@@ -593,11 +611,12 @@ std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createLevelMenu(con
 }
 
 std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createPauseMenu(const sf::Font& font, const double scale_x, const double scale_y){
-    float menu_left = 0 * scale_x, menu_top = 0 * scale_y, menu_width = 1920 * scale_x, menu_height = 1080 * scale_y;
-    float button_width  = 400 * scale_x, button_height = 100 * scale_y;
-    float button_left = menu_left + (menu_width - button_width) / 2.0;
-    float period = 150 * scale_y;
-    float button_top = menu_top + 2.0 * period;
+    auto menu_left = static_cast<float>(0 * scale_x), menu_top = static_cast<float>(0 * scale_y),
+        menu_width = static_cast<float>(1920 * scale_x), menu_height = static_cast<float>(1080 * scale_y);
+    auto button_width  = static_cast<float>(400 * scale_x), button_height = static_cast<float>(100 * scale_y);
+    float button_left = menu_left + (menu_width - button_width) / 2.0f;
+    auto period = static_cast<float>(150 * scale_y);
+    float button_top = menu_top + 2.0f * period;
     sf::FloatRect parameters(menu_left, menu_top, menu_width, menu_height);
     std::vector<std::shared_ptr<Button>> buttons;
     buttons.push_back(std::make_shared<ButtonRec>(sf::FloatRect(button_left, button_top + period, button_width, button_height)
@@ -620,11 +639,12 @@ std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createPauseMenu(con
 }
 
 std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createVictoryMenu(const sf::Font& font, const double scale_x, const double scale_y){
-    float menu_left = 0 * scale_x, menu_top = 0 * scale_y, menu_width = 1920 * scale_x, menu_height = 1080 * scale_y;
-    float button_width  = 400 * scale_x, button_height = 100 * scale_y;
-    float button_left = menu_left + (menu_width - button_width) / 2.0;
-    float period = 150 * scale_y;
-    float button_top = menu_top + 2.0 * period;
+    auto menu_left = static_cast<float>(0 * scale_x), menu_top = static_cast<float>(0 * scale_y),
+        menu_width = static_cast<float>(1920 * scale_x), menu_height = static_cast<float>(1080 * scale_y);
+    auto button_width  = static_cast<float>(400 * scale_x), button_height = static_cast<float>(100 * scale_y);
+    float button_left = menu_left + (menu_width - button_width) / 2.0f;
+    auto period = static_cast<float>(150 * scale_y);
+    float button_top = menu_top + 2.0f * period;
     sf::FloatRect parameters(menu_left, menu_top, menu_width, menu_height);
     std::vector<std::shared_ptr<Button>> buttons;
     buttons.push_back(std::make_shared<ButtonRec>(sf::FloatRect(button_left, button_top + period, button_width, button_height)
@@ -638,7 +658,7 @@ std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createVictoryMenu(c
     buttons.push_back(std::make_shared<ButtonRec>(sf::FloatRect(button_left, button_top + period * 3, button_width, button_height)
             , sf::Color(255, 120, 60, 255)
             , sf::Color::Red, sf::Color::Red, sf::Color::White, font, std::min(scale_x, scale_y) * 48, "Exit", 5));
-    ContextMenu menu(parameters, font, std::min(scale_x, scale_y) * 128, "VICTORY!!!", buttons
+    ContextMenu menu(parameters, font,  128, "VICTORY!!!", buttons
             ,sf::Color(25, 128, 0, 255)
             , sf::Color(230, 165, 50, 255)
             , sf::Color::Red);
@@ -647,11 +667,12 @@ std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createVictoryMenu(c
 }
 
 std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createDefeatMenu(const sf::Font& font, const double scale_x, const double scale_y){
-    float menu_left = 0 * scale_x, menu_top = 0 * scale_y, menu_width = 1920 * scale_x, menu_height = 1080 * scale_y;
-    float button_width  = 400 * scale_x, button_height = 100 * scale_y;
-    float button_left = menu_left + (menu_width - button_width) / 2.0;
-    float period = 150 * scale_y;
-    float button_top = menu_top + 2.0 * period;
+    auto menu_left = static_cast<float>(0 * scale_x), menu_top = static_cast<float>(0 * scale_y),
+            menu_width = static_cast<float>(1920 * scale_x), menu_height = static_cast<float>(1080 * scale_y);
+    auto button_width  = static_cast<float>(400 * scale_x), button_height = static_cast<float>(100 * scale_y);
+    float button_left = menu_left + (menu_width - button_width) / 2.0f;
+    auto period = static_cast<float>(150 * scale_y);
+    float button_top = menu_top + 2.0f * period;
     sf::FloatRect parameters(menu_left, menu_top, menu_width, menu_height);
     std::vector<std::shared_ptr<Button>> buttons;
     buttons.push_back(std::make_shared<ButtonRec>(sf::FloatRect(button_left, button_top + period, button_width, button_height)
@@ -665,7 +686,7 @@ std::pair<ContextMenu, std::vector<std::shared_ptr<Button>>> createDefeatMenu(co
     buttons.push_back(std::make_shared<ButtonRec>(sf::FloatRect(button_left, button_top + period * 3, button_width, button_height)
             , sf::Color(255, 120, 60, 255)
             , sf::Color::Red, sf::Color::Red, sf::Color::White, font, std::min(scale_x, scale_y) * 48, "Exit", 5));
-    ContextMenu menu(parameters, font, std::min(scale_x, scale_y) * 128, "DEFEAT!", buttons
+    ContextMenu menu(parameters, font,  128, "DEFEAT!", buttons
             ,sf::Color(128, 30, 0, 255)
             , sf::Color(230, 165, 50, 255)
             , sf::Color::Red);
@@ -679,48 +700,56 @@ bool manageMainMenu(sf::RenderWindow& window, sf::Texture& main_menu_image, Cont
     while (window.pollEvent(event)) {
         bool should_break = false;
         switch (event.type) {
-            case sf::Event::Closed:
+            case sf::Event::Closed: {
                 window.close();
-
                 break;
-            case sf::Event::KeyPressed:
+            }
+            case sf::Event::KeyPressed: {
                 if (event.key.code == sf::Keyboard::Escape) {
                     window.close();
 
                     break;
                 }
+            }
             case sf::Event::MouseButtonPressed: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 switch (event.mouseButton.button) {
-                    case sf::Mouse::Button::Left:
+                    case sf::Mouse::Button::Left: {
                         size_t cnt = 0;
-                        for(auto& button : main_menu_buttons){
-                            if(cnt == 0 && button->isActivated(cursor)){
+                        for (auto &button : main_menu_buttons) {
+                            if (cnt == 0 && button->isActivated(cursor)) {
                                 main_menu.setVisible(false);
                                 level_menu.setVisible(true);
                                 should_break = true;
                                 break;
                             }
-                            if(cnt == main_menu_buttons.size() - 1 && button->isActivated(cursor)){
+                            if (cnt == main_menu_buttons.size() - 1 && button->isActivated(cursor)) {
                                 window.close();
                                 break;
                             }
                             ++cnt;
                         }
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                break;
+
             }
-            case sf::Event::MouseMoved:
+            case sf::Event::MouseMoved: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 for (auto &button : main_menu_buttons) {
                     button->checkCursor(cursor);
                 }
                 break;
+            }
+            default:
+                break;
         }
     }
     sf::Sprite main_menu_sprite;
     main_menu_sprite.setTexture(main_menu_image);
-    main_menu_sprite.setScale(scale_x, scale_y);
+    main_menu_sprite.setScale(static_cast<float>(scale_x), static_cast<float>(scale_y));
     window.draw(main_menu_sprite);
     main_menu.draw(window);
     return false;
@@ -736,10 +765,10 @@ bool manageLevelMenu(sf::RenderWindow& window, sf::Texture& main_menu_image, Con
             case sf::Event::MouseButtonPressed: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 switch (event.mouseButton.button) {
-                    case sf::Mouse::Button::Left:
+                    case sf::Mouse::Button::Left: {
                         int cnt = 0;
-                        for(auto& button : level_menu_buttons){
-                            if(cnt < passed_levels && button->isActivated(cursor)){
+                        for (auto &button : level_menu_buttons) {
+                            if (cnt < passed_levels && button->isActivated(cursor)) {
                                 level_menu.setVisible(false);
                                 chosen_level = cnt + 1;
                                 should_break = true;
@@ -747,22 +776,28 @@ bool manageLevelMenu(sf::RenderWindow& window, sf::Texture& main_menu_image, Con
                             }
                             ++cnt;
                         }
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                break;
             }
-            case sf::Event::MouseMoved:
+            case sf::Event::MouseMoved: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 for (auto &button : level_menu_buttons) {
 
                     button->checkCursor(cursor);
                 }
                 break;
+            }
+            default:
+                break;
         }
         if(should_break) break;
     }
     sf::Sprite level_menu_sprite;
     level_menu_sprite.setTexture(main_menu_image);
-    level_menu_sprite.setScale(scale_x, scale_y);
+    level_menu_sprite.setScale(static_cast<float>(scale_x), static_cast<float>(scale_y));
     window.draw(level_menu_sprite);
     level_menu.draw(window);
     return false;
@@ -773,30 +808,31 @@ bool managePauseMenu(sf::RenderWindow& window, ContextMenu& pause_menu, std::vec
     while (window.pollEvent(event)) {
         bool should_break = false;
         switch (event.type) {
-            case sf::Event::KeyPressed:
+            case sf::Event::KeyPressed: {
                 if (event.key.code == sf::Keyboard::Escape) {
                     pause_menu.setVisible(false);
 
                     break;
                 }
+            }
             case sf::Event::MouseButtonPressed: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 switch (event.mouseButton.button) {
-                    case sf::Mouse::Button::Left:
+                    case sf::Mouse::Button::Left: {
                         size_t cnt = 0;
-                        for(auto& button : pause_menu_buttons){
-                            if(cnt == 0 && button->isActivated(cursor)){
+                        for (auto &button : pause_menu_buttons) {
+                            if (cnt == 0 && button->isActivated(cursor)) {
                                 pause_menu.setVisible(false);
                                 should_break = true;
                                 break;
                             }
-                            if(cnt == 1 && button->isActivated(cursor)){
+                            if (cnt == 1 && button->isActivated(cursor)) {
                                 pause_menu.setVisible(false);
                                 should_break = true;
                                 return true;
                                 break;
                             }
-                            if(cnt == pause_menu_buttons.size() - 1 && button->isActivated(cursor)){
+                            if (cnt == pause_menu_buttons.size() - 1 && button->isActivated(cursor)) {
                                 pause_menu.setVisible(false);
                                 window.close();
                                 return false;
@@ -804,14 +840,20 @@ bool managePauseMenu(sf::RenderWindow& window, ContextMenu& pause_menu, std::vec
                             }
                             ++cnt;
                         }
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                break;
             }
-            case sf::Event::MouseMoved:
+            case sf::Event::MouseMoved: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 for (auto &button : pause_menu_buttons) {
                     button->checkCursor(cursor);
                 }
+                break;
+            }
+            default:
                 break;
         }
     }
@@ -826,31 +868,32 @@ bool manageVictoryMenu(sf::RenderWindow& window, ContextMenu& victory_menu, std:
     while (window.pollEvent(event)) {
         bool should_break = false;
         switch (event.type) {
-            case sf::Event::KeyPressed:
+            case sf::Event::KeyPressed: {
                 if (event.key.code == sf::Keyboard::Escape) {
                     victory_menu.setVisible(false);
 
                     break;
                 }
+            }
             case sf::Event::MouseButtonPressed: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 switch (event.mouseButton.button) {
-                    case sf::Mouse::Button::Left:
+                    case sf::Mouse::Button::Left: {
                         size_t cnt = 0;
-                        for(auto& button : victory_menu_buttons){
-                            if(cnt == 0 && button->isActivated(cursor)){
+                        for (auto &button : victory_menu_buttons) {
+                            if (cnt == 0 && button->isActivated(cursor)) {
                                 victory_menu.setVisible(false);
                                 should_break = true;
                                 ++chosen_level;
                                 break;
                             }
-                            if(cnt == 1 && button->isActivated(cursor)){
+                            if (cnt == 1 && button->isActivated(cursor)) {
                                 victory_menu.setVisible(false);
                                 should_break = true;
                                 return true;
                                 break;
                             }
-                            if(cnt == victory_menu_buttons.size() - 1 && button->isActivated(cursor)){
+                            if (cnt == victory_menu_buttons.size() - 1 && button->isActivated(cursor)) {
                                 victory_menu.setVisible(false);
                                 window.close();
                                 return false;
@@ -858,14 +901,21 @@ bool manageVictoryMenu(sf::RenderWindow& window, ContextMenu& victory_menu, std:
                             }
                             ++cnt;
                         }
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                break;
+
             }
-            case sf::Event::MouseMoved:
+            case sf::Event::MouseMoved: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 for (auto &button : victory_menu_buttons) {
                     button->checkCursor(cursor);
                 }
+                break;
+            }
+            default:
                 break;
         }
     }
@@ -878,31 +928,32 @@ bool manageDefeatMenu(sf::RenderWindow& window, ContextMenu& defeat_menu, std::v
     while (window.pollEvent(event)) {
         bool should_break = false;
         switch (event.type) {
-            case sf::Event::KeyPressed:
+            case sf::Event::KeyPressed: {
                 if (event.key.code == sf::Keyboard::Escape) {
                     defeat_menu.setVisible(false);
 
                     break;
                 }
+            }
             case sf::Event::MouseButtonPressed: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 switch (event.mouseButton.button) {
-                    case sf::Mouse::Button::Left:
+                    case sf::Mouse::Button::Left: {
                         size_t cnt = 0;
-                        for(auto& button : defeat_menu_buttons){
-                            if(cnt == 0 && button->isActivated(cursor)){
+                        for (auto &button : defeat_menu_buttons) {
+                            if (cnt == 0 && button->isActivated(cursor)) {
                                 defeat_menu.setVisible(false);
                                 should_break = true;
                                 try_again = true;
                                 break;
                             }
-                            if(cnt == 1 && button->isActivated(cursor)){
+                            if (cnt == 1 && button->isActivated(cursor)) {
                                 defeat_menu.setVisible(false);
                                 should_break = true;
                                 return true;
                                 break;
                             }
-                            if(cnt == defeat_menu_buttons.size() - 1 && button->isActivated(cursor)){
+                            if (cnt == defeat_menu_buttons.size() - 1 && button->isActivated(cursor)) {
                                 defeat_menu.setVisible(false);
                                 window.close();
                                 return false;
@@ -910,14 +961,20 @@ bool manageDefeatMenu(sf::RenderWindow& window, ContextMenu& defeat_menu, std::v
                             }
                             ++cnt;
                         }
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                break;
             }
-            case sf::Event::MouseMoved:
+            case sf::Event::MouseMoved: {
                 sf::Vector2i cursor = sf::Mouse::getPosition(window);
                 for (auto &button : defeat_menu_buttons) {
                     button->checkCursor(cursor);
                 }
+                break;
+            }
+            default:
                 break;
         }
     }

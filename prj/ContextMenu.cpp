@@ -32,6 +32,6 @@ ContextMenu::ContextMenu(const sf::FloatRect &parameters, const sf::Font &font
     name.setFillColor(text_clr);
     name.setString(header);
     auto name_pos = name.getGlobalBounds();
-    name.setOrigin(name_pos.left + name_pos.width / 2.0, name_pos.top + name_pos.height / 2.0);
+    name.setOrigin(static_cast<float>(name_pos.left + name_pos.width / 2.0), static_cast<float>(name_pos.top + name_pos.height / 2.0));
     name.setPosition(pos.x + width_ / 2, pos.y + name_pos.height);
 }

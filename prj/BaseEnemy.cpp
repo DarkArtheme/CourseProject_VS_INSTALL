@@ -16,7 +16,7 @@ void EnemyTextureLoader::LoadTextures(const std::string& path) {
 
 
 void BaseEnemy::move(sf::Clock& clock) {
-    float time = clock.getElapsedTime().asMilliseconds() / 6.0;
+    float time = clock.getElapsedTime().asMilliseconds() / 6.0f;
     sf::FloatRect cur_rec = sprite.getGlobalBounds();
     sf::Vector2f cntr(cur_rec.left + sprite_side / 2.0, cur_rec.top + sprite_side / 2.0);
 
@@ -87,11 +87,13 @@ void BaseEnemy::move(sf::Clock& clock) {
 }
 
 void BaseEnemy::draw(sf::RenderTarget& window){
-    float hp_left_coef = health * 1.0f / (max_health * 1.0f);
-    healthbar_green.setSize({(healthbar_border.getGlobalBounds().width - outline_thickness) * hp_left_coef, healthbar_border.getGlobalBounds().height - outline_thickness});
-    healthbar_red.setSize({(healthbar_border.getGlobalBounds().width - outline_thickness) * (1.0f - hp_left_coef), healthbar_border.getGlobalBounds().height - outline_thickness});
-    healthbar_green.setPosition(this->getCenterPosition().x - sprite_side / 2, this->getCenterPosition().y - sprite_side / 2 - healthbar_height);
-    healthbar_border.setPosition(this->getCenterPosition().x - sprite_side / 2, this->getCenterPosition().y - sprite_side / 2 - healthbar_height);
+    float hp_left_coef = static_cast<float>(health) * 1.0f / (static_cast<float>(max_health) * 1.0f);
+    healthbar_green.setSize({(healthbar_border.getGlobalBounds().width - static_cast<float>(outline_thickness)) * hp_left_coef,
+                             healthbar_border.getGlobalBounds().height - static_cast<float>(outline_thickness)});
+    healthbar_red.setSize({(healthbar_border.getGlobalBounds().width - static_cast<float>(outline_thickness)) * (1.0f - hp_left_coef),
+                            healthbar_border.getGlobalBounds().height - static_cast<float>(outline_thickness)});
+    healthbar_green.setPosition(this->getCenterPosition().x - static_cast<float>(sprite_side) / 2.0f, this->getCenterPosition().y - static_cast<float>(sprite_side) / 2.0f - static_cast<float>(healthbar_height));
+    healthbar_border.setPosition(this->getCenterPosition().x - static_cast<float>(sprite_side) / 2.0f, this->getCenterPosition().y - static_cast<float>(sprite_side) / 2.0f - static_cast<float>(healthbar_height));
     healthbar_red.setPosition(healthbar_green.getGlobalBounds().left + healthbar_green.getGlobalBounds().width
             , healthbar_green.getGlobalBounds().top);
     window.draw(sprite);
@@ -114,6 +116,7 @@ Direction BaseEnemy::setupDir(const std::string &str) {
     if(str == "down") return DOWN;
     if(str == "up") return UP;
     if(str == "right") return RIGHT;
+    return DOWN;
 }
 
 void BaseEnemy::changeTexture() {
@@ -135,7 +138,7 @@ LightEnemy::LightEnemy(const LevelMaker &lvl, sf::Clock &clk, const GridMaker &g
     dir = setupDir(lvl.getStart().name);
     auto start_rect = lvl.getStart().rect;
     sprite.setOrigin(sf::Vector2f(side / 2.0, side / 2.0));
-	sprite.setPosition(start_rect.left + grd.getScale() * 3.0 / 2.0, start_rect.top + grd.getScale() * 3.0 / 2.0);
+	sprite.setPosition(static_cast<float>(start_rect.left + grd.getScale() * 3.0 / 2.0), static_cast<float>(start_rect.top + grd.getScale() * 3.0 / 2.0));
 	sprite.setTexture((*textures)[dir]);
 
 	healthbar_width = sprite_side;
@@ -149,13 +152,15 @@ LightEnemy::LightEnemy(const LevelMaker &lvl, sf::Clock &clk, const GridMaker &g
 	shoud_be_deleted = false;
 	healthbar_green.setSize(sf::Vector2f(healthbar_width, healthbar_height));
 	healthbar_border.setSize(sf::Vector2f(healthbar_width + outline_thickness, healthbar_height + outline_thickness));
-	healthbar_border.setOutlineThickness(outline_thickness);
+	healthbar_border.setOutlineThickness(static_cast<float>(outline_thickness));
 	healthbar_border.setOutlineColor(sf::Color::Black);
 	healthbar_border.setFillColor(sf::Color(0,0,0,0));
 	healthbar_red.setFillColor(sf::Color::Red);
 	healthbar_green.setFillColor(sf::Color::Green);
-    healthbar_green.setPosition(this->getCenterPosition().x - side / 2, this->getCenterPosition().y - side / 2 - healthbar_height);
-    healthbar_border.setPosition(this->getCenterPosition().x - side / 2, this->getCenterPosition().y - side / 2 - healthbar_height);
+    healthbar_green.setPosition(this->getCenterPosition().x - static_cast<float>(side) / 2,
+                                this->getCenterPosition().y - static_cast<float>(side) / 2.0f - static_cast<float>(healthbar_height));
+    healthbar_border.setPosition(this->getCenterPosition().x - static_cast<float>(side) / 2,
+                                 this->getCenterPosition().y - static_cast<float>(side) / 2.0f - static_cast<float>(healthbar_height));
     healthbar_red.setPosition(healthbar_green.getGlobalBounds().left + healthbar_green.getGlobalBounds().width
             , healthbar_green.getGlobalBounds().top);
 
@@ -173,7 +178,7 @@ HeavyEnemy::HeavyEnemy(const LevelMaker &lvl, sf::Clock &clk, const GridMaker &g
 
 
     sprite.setOrigin(sf::Vector2f(side / 2.0, side / 2.0));
-    sprite.setPosition(start_rect.left + grd.getScale() * 3.0 / 2.0, start_rect.top + grd.getScale() * 3.0 / 2.0);
+    sprite.setPosition(static_cast<float>(start_rect.left + grd.getScale() * 3.0 / 2.0), static_cast<float>(start_rect.top + grd.getScale() * 3.0 / 2.0));
     sprite.setTexture((*textures)[dir]);
 
     healthbar_width = sprite_side;
@@ -188,13 +193,15 @@ HeavyEnemy::HeavyEnemy(const LevelMaker &lvl, sf::Clock &clk, const GridMaker &g
 
     healthbar_green.setSize(sf::Vector2f(healthbar_width, healthbar_height));
     healthbar_border.setSize(sf::Vector2f(healthbar_width + outline_thickness, healthbar_height + outline_thickness));
-    healthbar_border.setOutlineThickness(outline_thickness);
+    healthbar_border.setOutlineThickness(static_cast<float>(outline_thickness));
     healthbar_border.setOutlineColor(sf::Color::Black);
     healthbar_border.setFillColor(sf::Color(0,0,0,0));
     healthbar_red.setFillColor(sf::Color::Red);
     healthbar_green.setFillColor(sf::Color::Green);
-    healthbar_green.setPosition(this->getCenterPosition().x - side / 2, this->getCenterPosition().y - side / 2 - healthbar_height);
-    healthbar_border.setPosition(this->getCenterPosition().x - side / 2, this->getCenterPosition().y - side / 2 - healthbar_height);
+    healthbar_green.setPosition(this->getCenterPosition().x - static_cast<float>(side) / 2,
+                                this->getCenterPosition().y - static_cast<float>(side) / 2.0f - static_cast<float>(healthbar_height));
+    healthbar_border.setPosition(this->getCenterPosition().x - static_cast<float>(side) / 2,
+                                 this->getCenterPosition().y - static_cast<float>(side) / 2.0f - static_cast<float>(healthbar_height));
     healthbar_red.setPosition(healthbar_green.getGlobalBounds().left + healthbar_green.getGlobalBounds().width
         , healthbar_green.getGlobalBounds().top);
 }

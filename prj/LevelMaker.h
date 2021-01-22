@@ -22,8 +22,8 @@ public:
      * @param scalex Коэффициент масштабирования по X.
      * @param scaley Коэффициент масштабирования по Y.
      */
-    LevelMaker(const std::string& path, const std::string& filename, const int level_num
-    , const std::string& extension, const double scalex, const double scaley);
+    LevelMaker(const std::string& path, const std::string& filename, int level_num
+    , const std::string& extension, double scalex, double scaley);
     ~LevelMaker() = default;
     /**
      * @brief Отрисовка уровня.

@@ -27,7 +27,7 @@ public:
      * @param window Окно игры.
      * @param sc Размер квадрата сетки.
      */
-    explicit GridMaker(const sf::RenderTarget& window, const int sc);
+    explicit GridMaker(const sf::RenderTarget& window, int sc);
     /**
      * @brief Обновляет сетку при изменении размера окна.
      * @param window Окно игры.

@@ -86,7 +86,7 @@ public:
 
 protected:
     //sf::Music sound_step;
-    std::vector<sf::Texture>* textures;
+    std::vector<sf::Texture>* textures{nullptr};
 	sf::Sprite sprite;
 	int healthbar_width{0};
 	int healthbar_height{0};
@@ -94,10 +94,10 @@ protected:
 	sf::RectangleShape healthbar_green;
 	sf::RectangleShape healthbar_red;
 	Direction dir{Direction::DOWN};      // текущее направление
-    double scale_x, scale_y;
+    double scale_x{1.0}, scale_y{1.0};
 	float speed{0.1};
 	int health{0};
-	int sprite_side;
+	int sprite_side{16};
 	int points_for_kill{0};
     int max_health{0};
     int outline_thickness{0};
@@ -128,7 +128,7 @@ public:
      * @param scale_x_ Коэффициент масштабирования по X.
      * @param scale_y_ Коэффициент масштабирования по Y.
      */
-    explicit LightEnemy(const LevelMaker& lvl, sf::Clock& clk, const GridMaker& grd, const int side, const double scale_x_, const double scale_y_);
+    explicit LightEnemy(const LevelMaker& lvl, sf::Clock& clk, const GridMaker& grd, int side, double scale_x_, double scale_y_);
 private:
 };
 
@@ -148,7 +148,7 @@ public:
      * @param scale_x_ Коэффициент масштабирования по X.
      * @param scale_y_ Коэффициент масштабирования по Y.
      */
-    explicit HeavyEnemy(const LevelMaker& lvl, sf::Clock& clk, const GridMaker& grd, const int side, const double scale_x_, const double scale_y_);
+    explicit HeavyEnemy(const LevelMaker& lvl, sf::Clock& clk, const GridMaker& grd, int side, double scale_x_, double scale_y_);
 private:
 
 };

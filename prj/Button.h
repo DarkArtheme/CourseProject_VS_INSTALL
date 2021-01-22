@@ -37,7 +37,7 @@ public:
     /**
      * @param value Значение, изменяющее видимость кнопки (true - видима).
      */
-    virtual void setVisible(const bool value);
+    virtual void setVisible(bool value);
     /**
      * @return Логическое значение, означающее, установлено ли состояние перманентного нажатия.
      */
@@ -70,7 +70,7 @@ protected:
     float width_{0}, height_{0};
     bool is_visible{true};
     bool permanently_clicked{false};
-    Status status;
+    Status status{DEACTIVATED};
 };
 
 ///@brief Класс кнопки, основанной на наборе спрайтов.
@@ -78,7 +78,7 @@ class ButtonSpr : public Button {
 public:
     ButtonSpr() = delete;
     ButtonSpr(const ButtonSpr&) = default;
-    ButtonSpr& operator=(const ButtonSpr&) = default;
+    ButtonSpr& operator=(const ButtonSpr&) = delete;
     ~ButtonSpr() = default;
     /**
      * @brief Конструктор.
@@ -91,7 +91,7 @@ public:
      */
     explicit ButtonSpr(const sf::Texture& deactivated_texture
     , const sf::Texture& targeted_texture, const sf::Texture& clicked_texture
-    , sf::Vector2f position, const float width, const float height);
+    , sf::Vector2f position, float width, float height);
 
     bool checkCursor(const sf::Vector2i& curs_pos) override;
     bool isActivated(const sf::Vector2i& curs_pos) override;
@@ -125,7 +125,7 @@ public:
     explicit ButtonRec(const sf::FloatRect& place, const sf::Color& color_deactivated
     , const sf::Color& color_targeted, const sf::Color& color_clicked
     , const sf::Color& color_text, const sf::Font& font
-    , const unsigned int size, const std::string& str, float thickness_shadow);
+    , unsigned int size, const std::string& str, float thickness_shadow);
     bool checkCursor(const sf::Vector2i& curs_pos) override;
     bool isActivated(const sf::Vector2i& curs_pos) override;
     void draw(sf::RenderTarget& window) override;

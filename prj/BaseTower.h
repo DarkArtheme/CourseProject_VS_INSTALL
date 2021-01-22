@@ -107,7 +107,7 @@ public:
      * @brief Устанавливает врагов в радиусе поражения.
      * @param query_ Вектор итераторов основного вектора врагов.
      */
-    void setQuery(std::vector<std::vector<std::shared_ptr<BaseEnemy>>::iterator> query_);
+    void setQuery(const std::vector<std::vector<std::shared_ptr<BaseEnemy>>::iterator>& query_);
     /**
      * @brief Проверяет, попала ли ракета в какого-либо врага в радиусе поражения.
      * @param it Ссылка на итератор, в который записывается, в какого врага попала ракета (если ракета не попала, то записи не происходит).
@@ -141,7 +141,7 @@ protected:
     float rocket_speed{0};
     float angle{0};
     int damage{0};
-    double scale_x, scale_y;
+    double scale_x{1.0}, scale_y{1.0};
     bool explosion_is_visible{false};
     unsigned int cur_frame{0};
     std::vector<std::vector<std::shared_ptr<BaseEnemy>>::iterator> query;
@@ -168,8 +168,8 @@ public:
      * @param scale_x_ Коэффициент масштабирования по X.
      * @param scale_y_ Коэффициент масштабирования по Y.
      */
-    explicit LightTower(const sf::Vector2i & position, const int side_
-    , sf::Clock* clock_, const double scale_x_, const double scale_y_);
+    explicit LightTower(const sf::Vector2i & position, int side_
+    , sf::Clock* clock_, double scale_x_, double scale_y_);
 private:
 };
 
@@ -188,8 +188,8 @@ public:
      * @param scale_x_ Коэффициент масштабирования по X.
      * @param scale_y_ Коэффициент масштабирования по Y.
      */
-    explicit HeavyTower(const sf::Vector2i & position, const int side_
-    , sf::Clock* clock_, const double scale_x_, const double scale_y_);
+    explicit HeavyTower(const sf::Vector2i & position, int side_
+    , sf::Clock* clock_, double scale_x_, double scale_y_);
 };
 
 

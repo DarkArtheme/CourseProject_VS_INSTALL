@@ -18,11 +18,11 @@ set(SOURCE_FILES BaseEnemy.h BaseEnemy.cpp
 #endif ()
 
 
-set(SFML_ROOT ${CMAKE_SOURCE_DIR}/libs/SFML_VS)
+set(SFML_ROOT ${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2)
 
 set(SFML_STATIC_LIBRARIES FALSE)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/libs/SFML_VS/cmake/Modules")
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/cmake/Modules")
 find_package(SFML REQUIRED COMPONENTS audio graphics window system)
 
 include_directories(${SFML_INCLUDE_DIR})

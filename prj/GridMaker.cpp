@@ -16,30 +16,31 @@ sf::IntRect makeRect(const T& obj){
 std::vector<sf::RectangleShape> GridMaker::makeRectangles(Orientation orientation) {
 	switch (orientation) {
 	case Orientation::HORIZONTAL: {
-		std::vector<sf::RectangleShape> hor_rectangles(window_height / scale);
+		std::vector<sf::RectangleShape> hrectangles(window_height / scale);
 		int y = scale;
-		for (auto& rect : hor_rectangles) {
-			rect.setPosition(0, y);
+		for (auto& rect : hrectangles) {
+			rect.setPosition(0, static_cast<float>(y));
 			y += scale;
 			rect.setFillColor(sf::Color::Black);
 			rect.setSize({ (float)window_width, 1 });
 		}
-		return std::move(hor_rectangles);
+		return std::move(hrectangles);
 	}
 	case Orientation::VERTICAL: {
-		std::vector<sf::RectangleShape> ver_rectangles(window_width / scale);
+		std::vector<sf::RectangleShape> vrectangles(window_width / scale);
 		int x = scale;
-		for (auto& rect : ver_rectangles) {
-			rect.setPosition(x, 0);
+		for (auto& rect : vrectangles) {
+			rect.setPosition(static_cast<float>(x), 0);
 			x += scale;
 			rect.setFillColor(sf::Color::Black);
 			rect.setSize({ 1, (float)window_height });
 		}
-		return std::move(ver_rectangles);
+		return std::move(vrectangles);
 	}
 	default:
 		break;
 	}
+	return std::vector<sf::RectangleShape>();
 }
 
 template<typename T>

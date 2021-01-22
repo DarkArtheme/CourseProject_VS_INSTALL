@@ -88,7 +88,7 @@ class TmxLevel
      * @param scale_x Коэффициент масштабирования по X.
      * @param scale_y Коэффициент масштабирования по Y.
      */
-    void Draw(sf::RenderTarget &target, const double scale_x, const double scale_y);
+    void Draw(sf::RenderTarget &target, double scale_x, double scale_y);
 
   private:
     int m_width = 0;

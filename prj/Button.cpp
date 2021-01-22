@@ -91,8 +91,8 @@ ButtonRec::ButtonRec(const sf::FloatRect &place, const sf::Color &color_deactiva
     text.setOutlineColor(sf::Color::Black);
     text.setOutlineThickness(0);
     auto text_rect = text.getGlobalBounds();
-    text.setOrigin(text_rect.left + text_rect.width / 2.0, text_rect.top + text_rect.height / 2.0);
-    text.setPosition(pos.x + width_ / 2.0, pos.y + height_ / 2.0);
+    text.setOrigin(static_cast<float>(text_rect.left + text_rect.width / 2.0), static_cast<float>(text_rect.top + text_rect.height / 2.0));
+    text.setPosition(static_cast<float>(pos.x + width_ / 2.0), static_cast<float>(pos.y + height_ / 2.0));
     rectshape.setSize({width_, height_});
     rectshape.setPosition(pos);
     rectshape.setFillColor(deactivated_color);

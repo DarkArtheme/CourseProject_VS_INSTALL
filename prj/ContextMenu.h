@@ -22,7 +22,7 @@ public:
      * @param border_clr Цвет границ меню.
      * @param text_clr Цвет названия меню.
      */
-    ContextMenu(const sf::FloatRect& parameters, const sf::Font& font, const unsigned int size
+    ContextMenu(const sf::FloatRect& parameters, const sf::Font& font, unsigned int size
     , const std::string& header, const std::vector<std::shared_ptr<Button>>& buttons_
     , sf::Color menu_clr, sf::Color border_clr, sf::Color text_clr);
     /**
@@ -52,7 +52,7 @@ private:
     sf::Color border_color;
     static const unsigned int thickness = 10;
     bool is_visible;
-    size_t index_of_tower;
+    size_t index_of_tower{0};
     sf::Vector2f pos;
     float width_, height_;
     sf::RectangleShape menu;

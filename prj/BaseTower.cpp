@@ -30,21 +30,14 @@ void BaseTower::draw(sf::RenderTarget &window) {
     }
     switch(state) {
         case NOT_BUILT:
-            break;
         case TARGETED_NOT_BUILD:
             break;
         case READY:
-            //window.draw(circle);
-            window.draw(sprite_base);
-            window.draw(sprite_rocket);
-            //sprite_tower.setTexture(TowerTextureLoader::tower_texture_1);
-            window.draw(sprite_tower);
-            break;
         case RELOADING:
             //window.draw(circle);
             window.draw(sprite_base);
             window.draw(sprite_rocket);
-            //sprite_tower.setTexture(TowerTextureLoader::empty_tower_texture_1);
+            //sprite_tower.setTexture(TowerTextureLoader::tower_texture_1);
             window.draw(sprite_tower);
             break;
     }
@@ -64,7 +57,7 @@ void BaseTower::flyRocket() {
     if(!isInRange(sprite_rocket.getPosition())){
         sound_explosion.play();
         sprite_explosion.setPosition(sprite_rocket.getPosition());
-        sprite_rocket.setPosition(pos.x + side / 2.0, pos.y + side / 2.0);
+        sprite_rocket.setPosition(static_cast<float>(pos.x + side / 2.0), static_cast<float>(pos.y + side / 2.0));
         explosion_is_visible = true;
         state = READY;
         cooldown_clock.restart();
@@ -89,7 +82,7 @@ bool BaseTower::isInRange(const sf::Vector2f& pt) const{
     return ((pt.x - center.x)*(pt.x - center.x) + (pt.y - center.y)*(pt.y - center.y) <= fire_range*fire_range);
 }
 
-void BaseTower::setQuery(std::vector<std::vector<std::shared_ptr<BaseEnemy>>::iterator> query_) {
+void BaseTower::setQuery(const std::vector<std::vector<std::shared_ptr<BaseEnemy>>::iterator>& query_) {
     query.clear();
     for(auto iter : query_){
         if(isInRange((*iter)->getCenterPosition())){
@@ -106,7 +99,7 @@ bool BaseTower::checkHit(std::vector<std::shared_ptr<BaseEnemy>>::iterator& it) 
                 int left_health = (*query[i])->getHealth() - damage;
                 (*query[i])->setHealth(left_health);
                 sound_explosion.play();
-                sprite_rocket.setPosition(pos.x + side / 2.0, pos.y + side / 2.0);
+                sprite_rocket.setPosition(static_cast<float>(pos.x + side / 2.0), static_cast<float>(pos.y + side / 2.0));
                 explosion_is_visible = true;
                 sprite_explosion.setPosition((*query[i])->getCenterPosition());
                 state = READY;
@@ -123,11 +116,11 @@ void BaseTower::isTimeToShoot() {
     if(query.empty()) return;
     for(size_t i = 0; i < query.size(); ++i) {
         std::shared_ptr<BaseEnemy>& enemy = *query[i];
-        double angle = sprite_rocket.getRotation();
+        double temp_angle = sprite_rocket.getRotation();
         //while(angle >= 90) { angle -= 90; }
         double dx = (enemy->getCenterPosition().x - (pos.x + side / 2.0) * 1.0);
         double dy = (enemy->getCenterPosition().y - (pos.y + side / 2.0) * 1.0);
-        double dangle = 0.0;
+        double dangle{0.0};
         if (enemy->getDirection() == LEFT || enemy->getDirection() == RIGHT) {
             dangle = isEqualExact(dy, 0.0) ? 90.0 : rtod(std::atan(std::abs(dx * 1.0 / dy)));
             if (dx <= 0.0 && dy <= 0.0) {
@@ -152,7 +145,7 @@ void BaseTower::isTimeToShoot() {
             }
 
         }
-        if (isEqualApprox(angle, dangle)) {
+        if (isEqualApprox(temp_angle, dangle)) {
             //std::cout << '{' << angle <<", " << dangle << "}\n";
             this->shoot();
         }
@@ -178,21 +171,21 @@ LightTower::LightTower(const sf::Vector2i &position, const int side_, sf::Clock 
     sprite_base.setTexture(TowerTextureLoader::base_texture);
     sprite_rocket.setTexture(TowerTextureLoader::rocket);
     sprite_tower.setTexture(TowerTextureLoader::tower_texture_1);
-    sprite_base.setOrigin(side_ / 2.0, side_ / 2.0);
-    sprite_tower.setOrigin(side_ / 2.0, side_ / 2.0);
-    sprite_rocket.setOrigin(side_ / 2.0, side_ / 2.0);
+    sprite_base.setOrigin(static_cast<float>(side_ / 2.0), static_cast<float>(side_ / 2.0));
+    sprite_tower.setOrigin(static_cast<float>(side_ / 2.0), static_cast<float>(side_ / 2.0));
+    sprite_rocket.setOrigin(static_cast<float>(side_ / 2.0), static_cast<float>(side_ / 2.0));
     sprite_base.setPosition(sf::Vector2f(pos.x + side_ / 2.0, pos.y + side_ / 2.0));
     sprite_tower.setPosition(sf::Vector2f(pos.x + side_ / 2.0, pos.y + side_ / 2.0));
     sprite_rocket.setPosition(sf::Vector2f(pos.x + side_ / 2.0, pos.y + side_ / 2.0));
     sprite_explosion.setTexture(TowerTextureLoader::explosion);
-    sprite_explosion.setOrigin(side / 2, side / 2);
+    sprite_explosion.setOrigin(static_cast<float>(side) / 2.0f, static_cast<float>(side) / 2.0f);
     sound_explosion.setBuffer(TowerSoundLoader::explosion);
     sound_shot.setBuffer(TowerSoundLoader::shot1);
     sound_explosion.setVolume(10);
     sound_shot.setVolume(10);
 
     damage = 40;
-    fire_range = 300 * std::min(scale_x, scale_y);
+    fire_range = static_cast<float>(300 * std::min(scale_x, scale_y));
     explosion_is_visible = false;
     cost = 200;
     rotation_speed = 2.0f;
@@ -218,21 +211,21 @@ HeavyTower::HeavyTower(const sf::Vector2i &position, const int side_, sf::Clock 
     sprite_base.setTexture(TowerTextureLoader::base_texture);
     sprite_rocket.setTexture(TowerTextureLoader::rocket);
     sprite_tower.setTexture(TowerTextureLoader::tower_texture_2);
-    sprite_base.setOrigin(side_ / 2.0, side_ / 2.0);
-    sprite_tower.setOrigin(side_ / 2.0, side_ / 2.0);
-    sprite_rocket.setOrigin(side_ / 2.0, side_ / 2.0);
+    sprite_base.setOrigin(static_cast<float>(side_ / 2.0), static_cast<float>(side_ / 2.0));
+    sprite_tower.setOrigin(static_cast<float>(side_ / 2.0), static_cast<float>(side_ / 2.0));
+    sprite_rocket.setOrigin(static_cast<float>(side_ / 2.0), static_cast<float>(side_ / 2.0));
     sprite_base.setPosition(sf::Vector2f(pos.x + side_ / 2.0, pos.y + side_ / 2.0));
     sprite_tower.setPosition(sf::Vector2f(pos.x + side_ / 2.0, pos.y + side_ / 2.0));
     sprite_rocket.setPosition(sf::Vector2f(pos.x + side_ / 2.0, pos.y + side_ / 2.0));
     sprite_explosion.setTexture(TowerTextureLoader::explosion);
-    sprite_explosion.setOrigin(side / 2, side / 2);
+    sprite_explosion.setOrigin(static_cast<float>(side) / 2.0f, static_cast<float>(side) / 2.0f);
     sound_explosion.setBuffer(TowerSoundLoader::explosion);
     sound_shot.setBuffer(TowerSoundLoader::shot2);
     sound_explosion.setVolume(10);
     sound_shot.setVolume(10);
 
     damage = 80;
-    fire_range = 500 * std::min(scale_x, scale_y);;
+    fire_range = static_cast<float>(500 * std::min(scale_x, scale_y));
     explosion_is_visible = false;
     cost = 500;
     rotation_speed = 1.0f;
