@@ -29,58 +29,32 @@ endif()
 include_directories(prj)
 include_directories(libs)
 
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}")
-install(FILES 
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/openal32.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-audio-d-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-graphics-d-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-system-d-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-window-d-2.dll 
-	CONFIGURATIONS Debug 
-	DESTINATION ${PROJECT_BINARY_DIR}/prj/Debug)
-install(FILES 
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/openal32.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-audio-d-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-graphics-d-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-system-d-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-window-d-2.dll 
-	CONFIGURATIONS Debug 
-	DESTINATION ${PROJECT_BINARY_DIR}/prj)
-	
+
 install(FILES 
 	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/openal32.dll
 	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-audio-2.dll
 	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-graphics-2.dll
 	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-system-2.dll
 	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-window-2.dll 
-	CONFIGURATIONS Release 
-	DESTINATION ${PROJECT_BINARY_DIR}/prj/Release)
-install(FILES 
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/openal32.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-audio-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-graphics-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-system-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-window-2.dll 
-	CONFIGURATIONS Release 
-	DESTINATION ${PROJECT_BINARY_DIR}/prj)
+	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-audio-d-2.dll
+	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-graphics-d-2.dll
+	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-system-d-2.dll
+	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-window-d-2.dll 
+	DESTINATION ${PROJECT_BINARY_DIR}/game)
 	
 	
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src CONFIGURATIONS Debug
-	DESTINATION ${PROJECT_BINARY_DIR}/prj/Debug)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src CONFIGURATIONS Debug
-	DESTINATION ${PROJECT_BINARY_DIR}/prj)
-	
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src CONFIGURATIONS Release
-	DESTINATION ${PROJECT_BINARY_DIR}/prj/Release)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src CONFIGURATIONS Release
-	DESTINATION ${PROJECT_BINARY_DIR}/prj)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src 
+	DESTINATION ${PROJECT_BINARY_DIR}/game)
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/doc DESTINATION ${PROJECT_BINARY_DIR})
 
 add_subdirectory(prj)
 add_subdirectory(libs)
+
+install(TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/game)
 
 
 
