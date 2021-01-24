@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-set(PROJECT_NAME SFML_Sandbox)
+set(PROJECT_NAME Tower_Siege)
 
 project(${PROJECT_NAME})
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /W1")
@@ -29,32 +29,30 @@ endif()
 include_directories(prj)
 include_directories(libs)
 
+add_subdirectory(prj)
+add_subdirectory(libs)
 
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}")
 
 install(FILES 
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/openal32.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-audio-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-graphics-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-system-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-window-2.dll 
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-audio-d-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-graphics-d-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-system-d-2.dll
-	${CMAKE_SOURCE_DIR}/libs/SFML-2.4.2/bin/sfml-window-d-2.dll 
-	DESTINATION ${PROJECT_BINARY_DIR}/game)
+	${SFML_DIR}/bin/openal32.dll
+	${SFML_DIR}/bin/sfml-audio-2.dll
+	${SFML_DIR}/bin/sfml-graphics-2.dll
+	${SFML_DIR}/bin/sfml-system-2.dll
+	${SFML_DIR}/bin/sfml-window-2.dll 
+	${SFML_DIR}/bin/sfml-audio-d-2.dll
+	${SFML_DIR}/bin/sfml-graphics-d-2.dll
+	${SFML_DIR}/bin/sfml-system-d-2.dll
+	${SFML_DIR}/bin/sfml-window-d-2.dll 
+	DESTINATION ${INSTALL_DIR})
 	
-	
-
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src 
-	DESTINATION ${PROJECT_BINARY_DIR}/game)
+	DESTINATION ${INSTALL_DIR})
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/doc DESTINATION ${PROJECT_BINARY_DIR})
 
-add_subdirectory(prj)
-add_subdirectory(libs)
 
-install(TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/game)
+install(TARGETS ${PROJECT_NAME} DESTINATION ${INSTALL_DIR})
 
 
 
